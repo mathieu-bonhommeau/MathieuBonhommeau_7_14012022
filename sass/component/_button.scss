@@ -1,0 +1,13 @@
+.btn-grey {
+    background-color: #E7E7E7;
+}
+
+.dropdown-filters {
+    width: 170px;
+}
+
+.dropdown-toggle::after {
+    border: none;
+    font-family: 'FontAwesome';
+    content: '\f078';
+}
