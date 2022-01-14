@@ -1,2 +1,3 @@
-# MathieuBonhommeau_7_14-01-2022
-OC Parcours JS REACT - Projet 7
+# MathieuBonhommeau_7_14012022
+Parcours OC - Développeur d'application - JavaScript React
+Projet 7 - Développez un algorithme de recherche en JavaScript
