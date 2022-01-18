@@ -1,3 +1,6 @@
+/**
+ * Class for create a Recipe object
+ */
 export class Recipe {
     constructor ({id, name, ingredients, time, description, appliance, ustensils}) {
         this._id = id

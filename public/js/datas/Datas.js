@@ -1,3 +1,6 @@
+/**
+ * Class for api/json connection - Use a singleton 
+ */
 export class Datas {
     constructor (path) {
         if (Datas.exists) {
@@ -20,7 +23,6 @@ export class Datas {
             }
         })
         .then((value) => {
-            console.log(value)
             return value
         })
         .catch((error) => {

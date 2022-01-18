@@ -2,12 +2,23 @@
     background-color: #E7E7E7;
 }
 
-.dropdown-filters {
-    width: 170px;
+.btn {
+    border: none;
+    color: $white;
+
+    &:hover, &:active, &:focus {
+        color: $white;
+    }
 }
 
-.dropdown-toggle::after {
-    border: none;
-    font-family: 'FontAwesome';
-    content: '\f078';
+.btn-primary {
+    background: $blue; 
+}
+
+.btn-success {
+    background: $green;
+}
+
+.btn-danger {
+    background: $red;
 }

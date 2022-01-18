@@ -1,13 +1,23 @@
+/**
+ * Class for create Recipe card and display it on the page
+ */
 export class RecipeCard {
     constructor (recipe) {
         this.recipe = recipe
         this.recipeSection = document.querySelector('#recipe-section .row')
     }
 
+    /**
+     * Insert the card in the recipe section
+     */
     build () {
         this.recipeSection.append(this.cardDOM())
     }
 
+    /**
+     * Create recipe card 
+     * @returns html element
+     */
     cardDOM () {
         const cardDOM = document.createElement('div')
         cardDOM.classList.add('col-4', 'mb-5')
@@ -23,13 +33,14 @@ export class RecipeCard {
                         <div class="row">
                             <ul class="col-6 list-unstyled list-group">
             `
+        // Create HTML for each ingredients of the recipe and adapt text (abbreviations and troncate)
         this.recipe.ingredients.forEach(element => {
             cardHTML += 
                 `
                     <li class="list-group-item card-list">
                         ${ element.ingredient ? '<span class="fw-bold">' + element.ingredient + '</span>' : '' }
                         ${ element.quantity ? ': ' + element.quantity : '' }
-                        ${ element.unit ? element.unit.replace('grammes', 'g').replace('cuillère à soupe', 'cas') : '' }</li>
+                        ${ element.unit ? element.unit.replace('grammes', 'g').replace('cuillères à soupe', 'cs') : '' }</li>
                 `
         })
         
@@ -37,7 +48,7 @@ export class RecipeCard {
                             </ul>
                             <div class="col-6">
                                 <p class="card-text text-justify">
-                                    ${ this.recipe.description.length > 250 ? this.recipe.description.substr(0, 250) + '...' : this.recipe.description }
+                                    ${ this.recipe.description.length > 200 ? this.recipe.description.substr(0, 200) + '...' : this.recipe.description }
                                 </p>
                             </div>
                         </div>
