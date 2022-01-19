@@ -5,8 +5,10 @@ export class FilterItems {
         datas.forEach((element) => {
             element.ingredients.forEach((e) => {
                 // Change the firs letter in upperCase and concat with rest of the text
-                const ingredient = e.ingredient[0].toUpperCase() + e.ingredient.slice(1)
-                ingredients.push(ingredient)
+                if (e !== null) {
+                    const ingredient = e.ingredient[0].toUpperCase() + e.ingredient.slice(1)
+                    ingredients.push(ingredient)
+                }
             })
         })
         // Delete duplicates elements
@@ -17,7 +19,9 @@ export class FilterItems {
         // Create an appliance array - We filter datas for get only appliance
         let appliances = []
         datas.forEach((element) => {
-            appliances.push(element.appliance)
+            if (element !== null) {
+                appliances.push(element.appliance)
+            }
         })
         // Delete duplicates elements
         return new Set(appliances)
@@ -28,9 +32,11 @@ export class FilterItems {
         let ustensils = []
         datas.forEach((element) => {
             element.ustensils.forEach((e) => {
-                // Change the firs letter in upperCase and concat with rest of the text
-                const ustensil = e[0].toUpperCase() + e.slice(1)
-                ustensils.push(ustensil)
+                if (e !== null) {
+                    // Change the firs letter in upperCase and concat with rest of the text
+                    const ustensil = e[0].toUpperCase() + e.slice(1)
+                    ustensils.push(ustensil)
+                }
             })
         })
         // Delete duplicates elements

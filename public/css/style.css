@@ -11195,24 +11195,49 @@ textarea.form-control-lg {
   width: 670px;
   height: 370px;
   color: #FFFFFF;
-  padding: 2em;
+  padding: 0 2em 2em 2em;
   overflow-y: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   font-size: 18px;
+}
+.dropdown-list::-webkit-scrollbar {
+  display: none;
 }
 .dropdown-list[aria-labelledby=dropdown-ingredients] {
   background-color: #3282F7;
 }
-.dropdown-list[aria-labelledby=dropdown-appliance] {
+.dropdown-list[aria-labelledby=dropdown-appliances] {
   background-color: #68D9A4;
 }
 .dropdown-list[aria-labelledby=dropdown-ustensils] {
   background-color: #ED6454;
 }
 
-.dropdown-title {
+.dropdown-search {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+.dropdown-search .form-control {
+  background-color: transparent;
+  padding-left: 0;
+  padding-right: 0;
+  color: #FFFFFF;
+  width: 95%;
+}
+.dropdown-search .form-control:focus {
+  outline: none;
+  box-shadow: none;
+}
+.dropdown-search .form-control::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
+.dropdown-search .form-control::placeholder {
+  color: #FFFFFF;
+  opacity: 50%;
+  font-size: 18px;
+  font-weight: bold;
 }
 
 .close-dropdown {
@@ -11224,10 +11249,41 @@ textarea.form-control-lg {
   width: 170px;
 }
 
+.dropdown-toggle {
+  position: relative;
+  text-align: left;
+}
 .dropdown-toggle::after {
+  position: absolute;
   border: none;
   font-family: "FontAwesome";
   content: "\f078";
+  bottom: 30%;
+  right: 20px;
+}
+
+.item {
+  cursor: pointer;
+}
+
+.tag {
+  position: relative;
+  color: #FFFFFF;
+}
+.tag[data-list=ingredients] {
+  background-color: #3282F7;
+}
+.tag[data-list=appliances] {
+  background-color: #68D9A4;
+}
+.tag[data-list=ustensils] {
+  background-color: #ED6454;
+}
+
+.close-tag {
+  position: relative;
+  padding-left: 1em;
+  bottom: -1px;
 }
 
 /*# sourceMappingURL=style.css.map */

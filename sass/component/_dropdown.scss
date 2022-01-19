@@ -8,14 +8,20 @@
     width: 670px;
     height: 370px;
     color: $white;
-    padding: 2em;
+    padding: 0 2em 2em 2em;
     overflow-y: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     font-size: $card-title-size;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
     
     &[aria-labelledby="dropdown-ingredients"] {
         background-color: $blue;
     }
-    &[aria-labelledby="dropdown-appliance"] {
+    &[aria-labelledby="dropdown-appliances"] {
         background-color: $green;
     }
     &[aria-labelledby="dropdown-ustensils"] {
@@ -23,10 +29,34 @@
     }
 }
 
-.dropdown-title {
+.dropdown-search {
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    .form-control {
+        background-color: transparent;
+        padding-left: 0;
+        padding-right: 0;
+        color: $white;
+        width: 95%;
+        
+        &:focus {
+            outline: none;
+            box-shadow: none;
+        }
+
+        &::-webkit-search-cancel-button {
+            -webkit-appearance: none;
+        }
+
+        &::placeholder {
+            color: $white;
+            opacity: 50%;
+            font-size: $card-title-size;
+            font-weight: bold;
+        }
+    }
 }
 
 .close-dropdown {
@@ -39,10 +69,19 @@
 }
 
 .dropdown-toggle {
+    position: relative;
+    text-align: left;
 
     &::after {
+        position: absolute;
         border: none;
         font-family: 'FontAwesome';
         content: '\f078';
+        bottom: 30%;
+        right: 20px;
     }
+}
+
+.item {
+    cursor: pointer;
 }

@@ -1,7 +1,8 @@
 import { Datas } from '../datas/Datas.js'
 import { Recipe } from '../models/Recipe.js'
 import { RecipeCard } from '../templates/RecipeCard.js'
-import { displayItems } from '../listeners/displayItems.js'
+import { displayListbox } from '../listeners/displayListbox.js'
+import { closeListbox } from '../listeners/displayListbox.js'
 
 /**
  * Class for display the homepage
@@ -26,16 +27,29 @@ class Index {
             recipeCard.build()
         })
 
-        // Event listeners when click on dropdown button
+        // Event listeners when click on dropdown button for display listboxs
         const dropdowns = document.querySelectorAll('.dropdown-filters')
         dropdowns.forEach((element) => {
             element.addEventListener('click', (event) => {
-                const listbox = event.target.parentElement
-                displayItems(datas, listbox)
+                // this event is dispatch only on click on a dropdown button
+                if (event.target.dataset.type === 'button') {
+                    // If a listbox is already opened - close it
+                    const listboxOpened = sessionStorage.getItem('button')
+                    if (listboxOpened && listboxOpened.length > 0) {
+                        closeListbox(listboxOpened)
+                    }
+                    // Retrieve parent element for replace the button by the listbox
+                    const listbox = event.target.parentElement
+                    displayListbox(datas, listbox)
+                }
+                
             })
         })
     }
 }
+
+// Clear session storage when the page is reload
+document.addEventListener("DOMContentLoaded", () => sessionStorage.clear())
 
 const index = new Index ()
 index.displayIndex ()
