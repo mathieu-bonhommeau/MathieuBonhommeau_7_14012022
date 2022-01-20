@@ -1,0 +1,87 @@
+.row-dropdowns {
+    position: relative;
+    height: 75px;
+    z-index: 1000;
+}
+
+.dropdown-list {
+    width: 670px;
+    height: 370px;
+    color: $white;
+    padding: 0 2em 2em 2em;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    font-size: $card-title-size;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+    
+    &[aria-labelledby="dropdown-ingredients"] {
+        background-color: $blue;
+    }
+    &[aria-labelledby="dropdown-appliances"] {
+        background-color: $green;
+    }
+    &[aria-labelledby="dropdown-ustensils"] {
+        background-color: $red;
+    }
+}
+
+.dropdown-search {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .form-control {
+        background-color: transparent;
+        padding-left: 0;
+        padding-right: 0;
+        color: $white;
+        width: 95%;
+        
+        &:focus {
+            outline: none;
+            box-shadow: none;
+        }
+
+        &::-webkit-search-cancel-button {
+            -webkit-appearance: none;
+        }
+
+        &::placeholder {
+            color: $white;
+            opacity: 50%;
+            font-size: $card-title-size;
+            font-weight: bold;
+        }
+    }
+}
+
+.close-dropdown {
+    opacity: 1;
+    cursor: pointer;
+}
+
+.dropdown-filters {
+    width: 170px;
+}
+
+.dropdown-toggle {
+    position: relative;
+    text-align: left;
+
+    &::after {
+        position: absolute;
+        border: none;
+        font-family: 'FontAwesome';
+        content: '\f078';
+        bottom: 30%;
+        right: 20px;
+    }
+}
+
+.item {
+    cursor: pointer;
+}
