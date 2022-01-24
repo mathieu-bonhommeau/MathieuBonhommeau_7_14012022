@@ -3,6 +3,7 @@ import { Recipe } from '../models/Recipe.js'
 import { RecipeCard } from '../templates/RecipeCard.js'
 import { displayListbox } from '../listeners/displayListbox.js'
 import { closeListbox } from '../listeners/displayListbox.js'
+import { SearchBarFilter } from '../filters/SearchBarFilter.js'
 
 /**
  * Class for display the homepage
@@ -21,10 +22,28 @@ class Index {
         const datas = await this._datas.getFullDatas()
 
         // Create a Recipe object with datas and create card displayed on DOM
-        datas.forEach((element) => {
-            const recipe = new Recipe(element)
-            const recipeCard = new RecipeCard(recipe)
-            recipeCard.build()
+        this.createRecipes(datas)
+
+        // Event listener for principal search - Searchbar
+        const searchBarInput = document.querySelector('#search-bar')
+        searchBarInput.addEventListener('keyup', (event) => {
+
+            // Get the string which we must search in recipes
+            const search = event.target.value
+            // Do nothing while number of characters are less than 3
+            while (search.length < 3) {
+                this.createRecipes(datas)
+                return
+            }
+            // Call the function for filter
+            const $searchBarFilter = new SearchBarFilter (search, datas)
+            const recipeFiltered = $searchBarFilter.search()
+            if (recipeFiltered.length > 0) {
+                document.querySelector('#recipe-section .row').innerHTML = ''
+            }
+
+            // Create a Recipe object with datas and create card displayed on DOM
+            this.createRecipes(recipeFiltered)
         })
 
         // Event listeners when click on dropdown button for display listboxs
@@ -41,9 +60,16 @@ class Index {
                     // Retrieve parent element for replace the button by the listbox
                     const listbox = event.target.parentElement
                     displayListbox(datas, listbox)
-                }
-                
+                } 
             })
+        })
+    }
+
+    createRecipes (datas) {
+        datas.forEach((element) => {
+            const recipe = new Recipe(element)
+            const recipeCard = new RecipeCard(recipe)
+            recipeCard.build()
         })
     }
 }
