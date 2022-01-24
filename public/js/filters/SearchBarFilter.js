@@ -14,82 +14,44 @@ export class SearchBarFilter {
      * @returns array of recipe
      */
     search () {
-        let i = 0
-        let j = 0
-        let recipesFiltered = []
 
-        while (i < this.recipes.length) {
+        // Transform all compared string in normalize unicode for take off accent and specials characters
+        const lowerNeedle = this.needle.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+
+        const recipes = this.recipes.map((element) => {
+
             // Add a new propertie named level for each recipe and initialize it at 0
             // It use for sort recipe by pertinency after the filter operation
             let level = 0
-            // Transform all compared string in normalize unicode for take off accent and specials characters
-            const lowerNeedle = this.needle.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")
-            
+
             // Check if needle exist in recipe title
-            const name = this.recipes[i].name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+            const name = element.name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")
             if (name.indexOf(lowerNeedle) !== -1) {
                 level++
             }
 
             // Check if needle exist in recipe description
-            const description = this.recipes[i].description.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+            const description = element.description.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")
             if (description.indexOf(lowerNeedle) !== -1) {
                 level++
             }
 
             // Check if needle exist in recipe ingredients - If one occurence is found, the for loop stop
-            const ingredients = this.recipes[i].ingredients
-            for (const ingredient of ingredients) {
-                const normalizeIngredient = ingredient.ingredient.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
-                if (normalizeIngredient.indexOf(lowerNeedle) !== -1) {
-                    level++
-                    break
-                }
+            element.ingredients.join(' ')
+            if (element.ingredients.join(' ').indexOf(lowerNeedle) !== -1) {
+                level++
             }
 
-            // If level = 0, the recipe is delete from the initial array, else, the level properties is add in the recipe with is value
-            if (level > 0) {
-                recipesFiltered[j] = this.recipes[i]
-                recipesFiltered[j].level = level
-                j++
-            }
-            i++
-            
-        }
+            // Add level property in each recipe
+            element.level = level
+            return element
+        })
 
-        return this.sortRecipesFiltered(recipesFiltered)
+        // Filter element by level property - All of them whiwh are a level under 0 are delete
+        // Call sortRecipesFiltered for sort element by level
+        const recipesFiltered = recipes.filter((element) => element.level > 0)
+
+        return recipesFiltered.sort((a, b) => b.level - a.level)
 
     }
-
-    /**
-     * Sort the result of filter with a quick sort algorithm
-     * @param {Array} array 
-     * @returns array of recipes
-     */
-    sortRecipesFiltered(array) {
-        // If the array has only one element, it is return automatically
-        if (array.length > 1) {
-            const pivot = array[array.length -1]
-            const arrayLeft = []
-            const arrayRight = []
-            const sortRecipes = []
-
-            // All elements which are higher than pivot are saved in arrayLeft and the others in arrayRight
-            for (let i = 0; i < array.length - 1; i++) {
-                if (array[i].level > pivot.level) {
-                    arrayLeft.push(array[i])
-                } else {
-                    arrayRight.push(array[i])
-                }
-            }
-
-            // the arrayLeft, the pivot and the arrayRight are merge in a new tableau in this order
-            // Both array are re-sort with a recursive calls in this function until it remains 1 element
-            return sortRecipes.concat(this.sortRecipesFiltered(arrayLeft), pivot, this.sortRecipesFiltered(arrayRight))
-
-        } else {
-            return array
-        }
-    }
-
 }
