@@ -4,6 +4,7 @@ import { RecipeCard } from '../templates/RecipeCard.js'
 import { displayListbox } from '../listeners/displayListbox.js'
 import { closeListbox } from '../listeners/displayListbox.js'
 import { SearchBarFilter } from '../filters/SearchBarFilter.js'
+import { FilterIndex } from '../filters/FilterIndex.js'
 
 /**
  * Class for display the homepage
@@ -20,7 +21,10 @@ class Index {
     async displayIndex () {
         // Get datas by Datas object
         const datas = await this._datas.getFullDatas()
-
+        
+        // Build an indexation table - Gather all same words/strings and save their recipes id
+        const index = FilterIndex.buildIndex(datas)
+        console.log(index)
         // Create a Recipe object with datas and create card displayed on DOM
         this.createRecipes(datas)
 
@@ -37,7 +41,7 @@ class Index {
             }
             // Call the function for filter
             const $searchBarFilter = new SearchBarFilter (search, datas)
-            const recipeFiltered = $searchBarFilter.search()
+            const recipeFiltered = $searchBarFilter.search(index)
             if (recipeFiltered.length > 0) {
                 document.querySelector('#recipe-section .row').innerHTML = ''
             }
