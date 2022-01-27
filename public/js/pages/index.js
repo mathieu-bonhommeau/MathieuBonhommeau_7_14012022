@@ -24,14 +24,12 @@ class Index {
         
         // Build an indexation table - Gather all same words/strings and save their recipes id
         const index = FilterIndex.buildIndex(datas)
-        console.log(index)
         // Create a Recipe object with datas and create card displayed on DOM
         this.createRecipes(datas)
 
         // Event listener for principal search - Searchbar
         const searchBarInput = document.querySelector('#search-bar')
         searchBarInput.addEventListener('keyup', (event) => {
-
             // Get the string which we must search in recipes
             const search = event.target.value
             // Do nothing while number of characters are less than 3
