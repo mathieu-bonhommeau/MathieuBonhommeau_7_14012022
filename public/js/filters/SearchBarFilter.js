@@ -14,6 +14,9 @@ export class SearchBarFilter {
      * @returns array of recipe
      */
     search () {
+
+        const start = performance.now()
+
         let i = 0
         let j = 0
         let recipesFiltered = []
@@ -57,7 +60,12 @@ export class SearchBarFilter {
             
         }
 
-        return this.sortRecipesFiltered(recipesFiltered)
+        recipesFiltered = this.sortRecipesFiltered(recipesFiltered)
+
+        const duration = performance.now() - start
+        console.log(duration)
+
+        return recipesFiltered
 
     }
 
