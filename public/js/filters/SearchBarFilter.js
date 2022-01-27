@@ -15,7 +15,7 @@ export class SearchBarFilter {
      * @returns array of recipe
      */
     search (index) {
-
+        const start = performance.now()
         // Create a clone of index for avoid reference problems
         // At each input character, the index is reset
         const indexClone = JSON.parse(JSON.stringify(index));
@@ -51,7 +51,8 @@ export class SearchBarFilter {
             recipe.level = element[1]
             return recipe
         })
-        
+        const duration = performance.now() - start;
+        console.log(duration)
         return finalRecipes
     }
 
