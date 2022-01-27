@@ -15,6 +15,8 @@ export class SearchBarFilter {
      */
     search () {
 
+        const start = performance.now()
+
         // Transform all compared string in normalize unicode for take off accent and specials characters
         const lowerNeedle = this.needle.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")
 
@@ -51,7 +53,12 @@ export class SearchBarFilter {
         // Call sortRecipesFiltered for sort element by level
         const recipesFiltered = recipes.filter((element) => element.level > 0)
 
-        return recipesFiltered.sort((a, b) => b.level - a.level)
+        const recipesFilteredSorted = recipesFiltered.sort((a, b) => b.level - a.level)
+
+        const duration = performance.now() - start
+        console.log(duration)
+
+        return recipesFilteredSorted
 
     }
 }
