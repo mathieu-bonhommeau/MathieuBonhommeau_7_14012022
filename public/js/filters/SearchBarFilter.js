@@ -10,28 +10,73 @@ export class SearchBarFilter {
     }
 
     /**
-     * Search occurences of needle in recipes
+     * Search occurences of needle in recipes with dichotomous system search
      * @param {array} index
      * @returns array of recipe
      */
     search (index) {
         const start = performance.now()
-        // Create a clone of index for avoid reference problems
-        // At each input character, the index is reset
-        const indexClone = JSON.parse(JSON.stringify(index));
 
-        // Filter elements of index and return only those which are match to the search
-        const recipesId = indexClone.filter((element) => {
-            return this.needle === element[0].substring(0, this.needle.length)
-        })
+        // The cursor is placed on the middle of the array at the begin sort
+        let min = 0
+        let max = index.length -1
+        let cursor = ''
+        let notNeedle = true
+        let recipesId = ''
+        
+        while (notNeedle) {
+            cursor = Math.floor((max-min)/2 + min)
+
+            // If the search is found, we stop the loop 
+            if (this.needle === index[cursor][0].substring(0, this.needle.length)) {
+                recipesId = index[cursor][1]
+                notNeedle = false
+            }
+
+            // If the search is not found, we continue
+            if (this.needle.localeCompare(index[cursor][0].substring(0, this.needle.length)) < 0) {
+                max = cursor
+            } else if (this.needle.localeCompare(index[cursor][0].substring(0, this.needle.length)) > 0) {
+                min = cursor
+            }
+
+            // if max - min = 1, this means that the search doesn't exist in index because there cannot be an element between min and max 
+            if (max - min === 1) {
+                notNeedle = false
+            }
+        }
+
+        // If a string is found (id in index), we search if the next one or the previous one are ok too. 
+        // It's possible if the length of needle is less than the index word 
+        if (recipesId.length !== '' ) {
+            let more = cursor + 1
+            let less = cursor - 1
+
+            // We continue to search needle if the previous item is OK
+            while (this.needle === index[more][0].substring(0, this.needle.length)) {
+                recipesId = recipesId.concat(index[more][1])
+                // Go to the next item
+                more++
+            }
+            // We continue to search needle if the next item is OK
+            while (this.needle === index[less][0].substring(0, this.needle.length)) {
+                recipesId = recipesId.concat(index[less][1])
+                // Go to the previeous item
+                less--
+            }
+        }
 
         // For each element, we keep only id array (with their level)
         let concatRecipesId = []
         recipesId.forEach(element => {
-            concatRecipesId = concatRecipesId.concat([element[1]])
+            concatRecipesId = concatRecipesId.concat([element])
         })
         // We merge all arrays in one and we sort items by id
-        concatRecipesId = concatRecipesId.flat().sort((a, b) => a[0] - b[0])
+        concatRecipesId = concatRecipesId.sort((a, b) => a[0] - b[0])
+
+        concatRecipesId = concatRecipesId.map(element => {
+            return [...element]
+        })
 
         // We reduce the obtained array : if 2 or more item have the same id, we keep only one and we do the sum for the level 
         let reduceArray = concatRecipesId.filter((element, i, array) => {
@@ -51,9 +96,10 @@ export class SearchBarFilter {
             recipe.level = element[1]
             return recipe
         })
+
         const duration = performance.now() - start;
         console.log(duration)
+
         return finalRecipes
     }
-
 }
