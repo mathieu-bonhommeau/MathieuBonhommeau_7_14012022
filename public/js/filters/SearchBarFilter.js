@@ -15,6 +15,7 @@ export class SearchBarFilter {
      * @returns array of recipe
      */
     search (index) {
+        const start = performance.now()
         // The cursor is placed on the middle of the array at the begin sort
         let min = 0
         let max = index.length -1
@@ -69,10 +70,14 @@ export class SearchBarFilter {
         recipesId = this.removeDuplicates(this.sortId(recipesId, 0))
 
         // After, sort the result by level
-        const sortId = this.sortId(recipesId, 1)
+        let sortId = this.sortId(recipesId, 1)
         
         // Finally, we transform index just created by corresponding recipes
-        return this.transformIdByRecipe(sortId)
+        sortId = this.transformIdByRecipe(sortId)
+
+        const duration = performance.now() - start;
+        console.log(duration)
+        return sortId
     }
 
     /**
