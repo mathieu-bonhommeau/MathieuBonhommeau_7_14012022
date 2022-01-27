@@ -16,11 +16,9 @@ export class FilterIndex {
         // For example : "1": "bing string with all words ..."
         for (const recipe of recipes) {
 
-            let string = `${recipe.name} ${recipe.description}`
-            for (const ingredient of recipe.ingredients) {
-                string += ` ${ingredient.ingredient}`
-            }
-
+            let string = ''
+            string = `${recipe.name} ${recipe.description} ${recipe.ingredients.forEach(ingredient => string += ingredient)}`
+          
             // Take off all special characters
             string = string.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")
             // Take off all words which have less than 3 characters and split the string into an array
@@ -47,7 +45,68 @@ export class FilterIndex {
                     arrayWithKey[word].push([recipe.id, 1])
                 }
             }
+            
         }
+
+        // Create an array with all avaible words in each recipe
+        const recipesSringify = recipes.map(recipe => {
+            let string = ''
+            string = `${recipe.name} ${recipe.description} ${recipe.ingredients.forEach(ingredient => string += ingredient)}`
+          
+            // Take off all special characters
+            string = string.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+            // Take off all words which have less than 3 characters and split the string into an array
+            return string.replace(/\b.{0,3}\b/g, ',').replace(/[^a-z0-9,]{1}/g, '').split(/,{1,}/g)
+        })
+
+        const map = new Map()
+
+        recipesSringify.forEach(recipe => {
+            recipe.forEach(word => {
+                
+                if (word === "") {
+                    return
+                }
+
+                if (map.get(word) === undefined) {
+                    map.set(word, [[recipesSringify.indexOf(recipe) + 1, 1]])
+
+                } else if (map.get(word)[map.get(word).length - 1][0] === recipesSringify.indexOf(recipe) + 1) {
+                    map.get(word)[map.get(word).length - 1][1]++
+
+                } else if (map.get(word)[map.get(word).length - 1][0] !== recipesSringify.indexOf(recipe) + 1) {
+                    map.get(word).push([recipesSringify.indexOf(recipe) + 1, 1])
+                }
+            })
+            
+        })
+
+        console.log(map)
+
+        console.log(recipesSringify)
+
+            /*// For each word of big string
+            for (const word of array) {
+                if (word === "") {
+                    continue
+                }
+
+                // First, we create an array that as for key the word and push another array with the recipe id and a level 1 for the pertinence
+                if (arrayWithKey[word] === undefined) {
+                    arrayWithKey[word] = []
+                    arrayWithKey[word].push([recipe.id, 1])
+
+                // Secondly, if same word is find in big string (during the next loop), we increment level (this word is more relevant for this recipe)
+                // Check only the last item of arrayWithKey[word] because the loop reads recipes in ascending order and they are sorted by id in the json
+                } else if (arrayWithKey[word] !== undefined && arrayWithKey[word][(arrayWithKey[word].length-1)][0] === recipe.id) {
+                    arrayWithKey[word][(arrayWithKey[word].length-1)][1]++
+
+                // Finally, if the word exists but the recipe.id is not save in this item, we push another array with the recipe id and a level 1 
+                } else if (arrayWithKey[word] !== undefined && arrayWithKey[word][(arrayWithKey[word].length-1)][0] !== recipe.id) {
+                    arrayWithKey[word].push([recipe.id, 1])
+                }
+            }
+        })*/
 
         // Initialize 'index' for receive key/values pairs of arrayWithKey in a classical and iterable array (with index)
         const index = []
