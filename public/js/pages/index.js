@@ -20,7 +20,23 @@ class Index {
      */
     async displayIndex () {
         // Get datas by Datas object
-        const datas = await this._datas.getFullDatas()
+        let datas = await this._datas.getFullDatas()
+
+        /*for (let i = 0; i < 7; i++) {
+            let test = JSON.parse(JSON.stringify(datas));
+            test.map((element) => {
+                if (element === undefined) {
+                    return
+                }
+                
+                element.name = element.name+i
+                element.description = element.description+i
+                element.ingredients.map(e => e.ingredient = e.ingredient+i) 
+
+                return element
+            })
+            datas = datas.concat(test)
+        }*/
         
         // Build an indexation table - Gather all same words/strings and save their recipes id
         const index = FilterIndex.buildIndex(datas)

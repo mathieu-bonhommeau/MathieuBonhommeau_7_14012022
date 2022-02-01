@@ -15,6 +15,7 @@ export class SearchBarFilter {
      * @returns array of recipe
      */
     search (index) {
+        
         const start = performance.now()
         // The cursor is placed on the middle of the array at the begin sort
         let min = 0
