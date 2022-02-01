@@ -109,7 +109,7 @@ export class SearchBarFilter {
 
             // Test the performance - stop the stopwatch
             const duration = performance.now() - start;
-            
+            console.log(duration)
 
             return finalRecipes
 

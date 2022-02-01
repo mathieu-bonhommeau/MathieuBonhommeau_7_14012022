@@ -27,6 +27,23 @@ class Index {
         // For save initial results by search bar and go back when search by tags is remove
         let initialSearch = ''
         
+        // Block code for test the performance of this algorithm    
+        /*for (let i = 0; i < 5; i++) {
+            let test = JSON.parse(JSON.stringify(datas));
+            test.map((element) => {
+                if (element === undefined) {
+                    return
+                }
+                
+                element.name = element.name+i
+                element.description = element.description+i
+                element.ingredients.map(e => e.ingredient = e.ingredient+i) 
+
+                return element
+            })
+            datas = datas.concat(test)
+        }*/
+
         // Build an indexation table - Gather all same words/strings and save their recipes id
         const index = FilterIndex.buildRecipesIndex(datas)
 
