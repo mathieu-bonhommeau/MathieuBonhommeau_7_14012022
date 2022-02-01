@@ -6,6 +6,7 @@
 export class SearchBarFilter {
     constructor (needle, recipes) {
         this.needle = needle
+
         this.recipes = recipes
     }
 
@@ -14,6 +15,12 @@ export class SearchBarFilter {
      * @returns array of recipe
      */
     search () {
+
+        /*for (let i = 0; i < 11; i++) {
+            this.recipes = this.recipes.concat(this.recipes)
+        }
+
+        console.log(`Nombre de recettes à filtrer : ${this.recipes.length}`)*/
 
         const start = performance.now()
 
