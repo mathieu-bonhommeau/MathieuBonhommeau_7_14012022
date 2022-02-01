@@ -13,6 +13,7 @@ module.exports = {
     ignorePatterns: [
         '/dist/*',
         'webpack.config.js',
-        '.eslintrc.js'
+        '.eslintrc.js',
+        '/test/*'
     ]
 };
