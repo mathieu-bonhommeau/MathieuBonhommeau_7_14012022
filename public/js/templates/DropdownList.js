@@ -23,6 +23,7 @@ export class DropdownList {
         const button = this.target.querySelector('.dropdown-toggle')
         sessionStorage.setItem('button', this.filter)
         button.style.display = 'none'
+        button.setAttribute('aria-expanded', true)
 
         // Replace the button by the listbox
         this.dropdownMenu.classList.add('dropdown-list', 'rounded')
@@ -30,19 +31,19 @@ export class DropdownList {
         this.dropdownMenu.innerHTML = 
             `
                 <div class="row" data-name="${this.filter}">
-                    <form action="#" class="dropdown-search">
+                    <form action="#" class="dropdown-search" id="search-bar-${this.filter}">
                         <label for="search-${this.filter}" id="title-${this.filter}" class="form-label d-none">Rechercher un ${this.label()}</label>
-                        <input type="search" id="search-${this.filter}" class="form-control py-4 border-0 dropdown-input" placeholder="Rechercher un ${this.label()}">
-                        <i class="fas fa-chevron-up close-dropdown"></i>
+                        <input type="search" id="search-${this.filter}" class="form-control py-4 border-0 dropdown-input" placeholder="Rechercher un ${this.label()}" aria-labelledby="search-bar-${this.filter}">
+                        <i class="fas fa-chevron-up close-dropdown" role="button"></i>
                     </form>
-                    <div class="items-content row"></div>
+                    <div class="items-content row" aria-label="Liste des ${this.label()}"></div>
                 </div>
             `
 
         this.buildItems()
         
         this.target.append(this.dropdownMenu)
-        this.target.style.width = 'auto'
+        this.target.classList.replace('close', 'open')
     }
 
     buildItems () {
@@ -50,8 +51,9 @@ export class DropdownList {
 
         this.arrayItems.forEach((element) => {
             const item = document.createElement('div')
-            item.classList.add('item', 'col-4', 'py-1')
+            item.classList.add('item', 'col-12', 'col-lg-6','col-xl-4', 'py-1')
             item.setAttribute('data-value', element)
+            item.setAttribute('role', 'option')
             item.innerHTML = element
             itemsContent.append(item)
         })

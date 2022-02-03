@@ -87,7 +87,8 @@ export function closeListbox (listbox) {
     // Add the button in the DOM
     const buttonDOM = document.querySelector(`.dropdown-filters[data-name="${listbox}"] button`)
     buttonDOM.style.display = 'inline-block'
-    buttonDOM.parentElement.style.width = '170px'
+    buttonDOM.parentElement.classList.replace('open', 'close')
+    buttonDOM.setAttribute('aria-expanded', 'false')
 
 }
 

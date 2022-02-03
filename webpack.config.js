@@ -4,8 +4,7 @@ module.exports = {
   mode: 'production',
   entry: {
     polyfill: 'babel-polyfill',
-    index: '/public/js/pages/index.js',
-    photographer: '/public/js/pages/photographer-page.js'
+    index: '/public/js/pages/index.js'
   },
   output: {
     filename: '[name].min.js',

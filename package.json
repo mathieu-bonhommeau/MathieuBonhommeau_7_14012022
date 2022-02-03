@@ -24,6 +24,10 @@
     "bootstrap-icons": "^1.7.2"
   },
   "devDependencies": {
+    "@babel/core": "^7.17.0",
+    "@babel/preset-env": "^7.16.11",
+    "babel-loader": "^8.2.3",
+    "babel-polyfill": "^6.26.0",
     "eslint": "^8.6.0",
     "webpack": "^5.66.0",
     "webpack-cli": "^4.9.1"

@@ -2,6 +2,18 @@
     position: relative;
     height: 75px;
     z-index: 1000;
+
+    @media (max-width: 768px) {
+        height: auto;
+    }
+
+    .col-12 {
+        @media (max-width: 768px) {
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        } 
+    }
 }
 
 .dropdown-list {
@@ -26,6 +38,16 @@
     }
     &[aria-labelledby="dropdown-ustensils"] {
         background-color: $red;
+    }
+
+    @media (max-width: 1200px) {
+        width: 500px;
+    }
+    @media (max-width: 992px) {
+        width: 300px;
+    }
+    @media (max-width: 768px) {
+        width: 100%;
     }
 }
 
@@ -65,7 +87,33 @@
 }
 
 .dropdown-filters {
-    width: 170px;
+    &.close {
+        width: 170px;
+
+        @media (max-width: 768px) {
+            width: 100%;
+        }
+    }
+    &.open {
+        width: auto;
+        transform-origin: top center;
+        animation: listbox-open ease-in-out 400ms both;
+    }
+    
+}
+
+@keyframes listbox-open {
+    0% {
+        transform: rotateX(-90deg)
+    }
+
+    70% {
+        transform: rotateX(20deg)
+    }
+
+    100% {
+        transform: rotateX(0deg)
+    }
 }
 
 .dropdown-toggle {
