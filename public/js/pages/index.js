@@ -167,6 +167,9 @@ class Index {
                             recipesToFilter = (new SearchByTags (recipesToFilter, element).filter())
                             recipesFilterByTags = recipesToFilter
                         })
+                        if (recipesFilterByTags === '') {
+                            tags.forEach(element => element.remove())
+                        }
                     // If no tags, we display all recipes
                     } else {
                         recipesFilterByTags = initialSearch
