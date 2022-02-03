@@ -11209,8 +11209,8 @@ a, a:hover {
 }
 
 .dropdown-list {
-  width: 670px;
-  height: 370px;
+  max-width: 670px;
+  max-height: 370px;
   color: #FFFFFF;
   padding: 0 2em 2em 2em;
   overflow-y: scroll;
@@ -11232,16 +11232,17 @@ a, a:hover {
 }
 @media (max-width: 1200px) {
   .dropdown-list {
-    width: 500px;
+    max-width: 500px;
   }
 }
 @media (max-width: 992px) {
   .dropdown-list {
-    width: 300px;
+    max-width: 300px;
   }
 }
 @media (max-width: 768px) {
   .dropdown-list {
+    max-width: 100%;
     width: 100%;
   }
 }
@@ -11282,6 +11283,7 @@ a, a:hover {
 }
 @media (max-width: 768px) {
   .dropdown-filters.close {
+    max-width: 100%;
     width: 100%;
   }
 }
@@ -11289,6 +11291,12 @@ a, a:hover {
   width: auto;
   transform-origin: top center;
   animation: listbox-open ease-in-out 400ms both;
+}
+@media (max-width: 768px) {
+  .dropdown-filters.open {
+    max-width: 100%;
+    width: 100%;
+  }
 }
 
 @keyframes listbox-open {
