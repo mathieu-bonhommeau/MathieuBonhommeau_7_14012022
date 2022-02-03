@@ -13,7 +13,7 @@ import { SearchByTags } from '../filters/SearchByTags.js'
 class Index {
     constructor () {
         // Create a Datas object for api connection
-        this._datas = new Datas('/datas/recipes.json')
+        this._datas = new Datas('./datas/recipes.json')
     }
 
     /**

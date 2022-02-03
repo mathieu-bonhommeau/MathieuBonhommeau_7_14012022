@@ -48,6 +48,10 @@ export class SearchBarFilter {
             }
         })
         
+        if (recipeIdsWithoutLevel.length < 1) {
+            return []
+        }
+        
         // Compare arrays (with only ids) for check if a recipe is in two or more fold, in this case, we save id in interRecipes array
         recipeIdsWithoutLevel[0].forEach((element) => {
             let duplicate = 0
