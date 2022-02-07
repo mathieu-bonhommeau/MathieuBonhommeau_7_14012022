@@ -134,7 +134,7 @@ class Index {
 
         // Use a mutation observer for retrieve tag when it display on the DOM 
         // config : options for say at our observer what observe
-        const config = { childList: true, subtree: true }
+        const configTagsObserver = { childList: true, subtree: true }
 
         // Init the observer
         let tagsObserver = new MutationObserver(mutationsList => {
@@ -192,7 +192,7 @@ class Index {
             })
         })
         // Say at the observer : Start observe !
-        tagsObserver.observe(tags, config)
+        tagsObserver.observe(tags, configTagsObserver)
     }
 
     /**
@@ -209,7 +209,14 @@ class Index {
 }
 
 // Clear session storage when the page is reload
-document.addEventListener("DOMContentLoaded", () => sessionStorage.clear())
+document.addEventListener("DOMContentLoaded", () => {
+    sessionStorage.clear()
+})
+
+// Clear session storage when the page is reload
+window.addEventListener("load", () => {
+    setTimeout(() => document.querySelector('.loader-container').classList.add('hide'), 1000)
+})
 
 const index = new Index ()
 index.displayIndex ()

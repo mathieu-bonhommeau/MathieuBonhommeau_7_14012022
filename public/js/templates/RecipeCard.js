@@ -20,7 +20,7 @@ export class RecipeCard {
      */
     cardDOM () {
         const cardDOM = document.createElement('div')
-        cardDOM.classList.add('col-12','col-md-6', 'col-xl-4','mb-5')
+        cardDOM.classList.add('col-12','col-md-6', 'col-xl-4','mb-5', 'recipe')
         let cardHTML =
             `
                 <a href="#" title="Voir cette recette">

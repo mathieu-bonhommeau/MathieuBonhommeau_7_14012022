@@ -1,0 +1,59 @@
+.loader-container {
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    background-color: #ffffff;
+    z-index: 2000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hide {
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.loader {
+
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+
+    &__img {
+        text-align: center;
+        animation: heart 1.25s ease-in-out infinite;
+        width: 40%;
+        height: 40%;
+    }
+
+    &__title {
+        color: $headings-color;
+        font-size: 32px;
+        font-weight: bold;
+        margin-top: 18px;
+    }
+}
+
+@keyframes heart {
+    0% {
+        transform: scale(0);
+    }
+
+    20% {
+        transform: scale(1.6);
+    }
+
+    25% {
+        transform: scale(1);
+    }
+
+    45% {
+        transform: scale(1.4);
+    }
+
+    50%, 100% {
+        transform: scale(1);
+    }
+}
