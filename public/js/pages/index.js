@@ -78,6 +78,7 @@ class Index {
 
             // Do nothing while number of characters are less than 3
             while (search.length < 3) {
+                recipeFiltered = ''
                 this.createRecipes(datas)
                 return
             }
