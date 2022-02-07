@@ -67,11 +67,11 @@ class Index {
 
         searchBarInput.addEventListener('keyup', (event) => {
 
-            // If we change the search in search bar, we remove all tags
-            tags.innerHTML = ''
-
             // Get the string which we must search in recipes
             const search = event.target.value
+
+            // If we change the search in search bar, we remove all tags
+            tags.innerHTML = ''
 
             // Reset recipes in the DOM
             document.querySelector('#recipe-section .row').innerHTML = ''
@@ -173,10 +173,14 @@ class Index {
                         }
                     // If no tags, we display all recipes
                     } else {
-                        recipesFilterByTags = initialSearch
+                        if (initialSearch && document.querySelector('#search-bar').value.length < 3) {
+                            recipesFilterByTags = datas
+                        } else {
+                            recipesFilterByTags = initialSearch
+                        }
                     }
                 }
-                
+
                 // Empty all recipes
                 document.querySelector('#recipe-section .row').innerHTML = ''
 
