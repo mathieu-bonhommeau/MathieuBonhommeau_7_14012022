@@ -11361,6 +11361,7 @@ a, a:hover {
 .hide {
   opacity: 0;
   transition: opacity 0.3s;
+  z-index: -20;
 }
 
 .loader {
