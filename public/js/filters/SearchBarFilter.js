@@ -3,7 +3,7 @@
  * It browse all recipes and check if the "needle" exist in title, description or ingredients properties
  * If the algorithm doesn't find the needle in one of those, the affected recipe is delete of the initial array
  */
-export class SearchBarFilter {
+ export class SearchBarFilter {
     constructor (needle, recipes) {
         this.needle = needle
 
@@ -24,42 +24,66 @@ export class SearchBarFilter {
 
         const start = performance.now()
 
-        // Transform all compared string in normalize unicode for take off accent and specials characters
-        const lowerNeedle = this.needle.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+        // We split the needle with space separator for allow search many words in one time
+        const needles = this.needle.split(' ')
+        
+        let recipesFiltered = []
 
-        const recipes = this.recipes.map((element) => {
+        let recipesToFilter = [...this.recipes]
 
-            // Add a new propertie named level for each recipe and initialize it at 0
-            // It use for sort recipe by pertinency after the filter operation
-            let level = 0
-
-            // Check if needle exist in recipe title
-            const name = element.name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")
-            if (name.indexOf(lowerNeedle) !== -1) {
-                level++
+        needles.forEach(word => {
+            console.log(word)
+            if (word.length < 3) {
+                return
             }
 
-            // Check if needle exist in recipe description
-            const description = element.description.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")
-            if (description.indexOf(lowerNeedle) !== -1) {
-                level++
+            if (recipesFiltered.length > 0) {
+                recipesFiltered.forEach(e => e.level = 0)
+                recipesToFilter = recipesFiltered
             }
 
-            // Check if needle exist in recipe ingredients - If one occurence is found, the for loop stop
-            element.ingredients.join(' ')
-            if (element.ingredients.join(' ').indexOf(lowerNeedle) !== -1) {
-                level++
-            }
+            // Transform all compared string in normalize unicode for take off accent and specials characters
+            const lowerNeedle = word.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")
 
-            // Add level property in each recipe
-            element.level = level
-            return element
+            const recipes = recipesToFilter.map((element) => {
+                
+                // Add a new propertie named level for each recipe and initialize it at 0
+                // It use for sort recipe by pertinency after the filter operation
+                let level = 0
+
+                // Check if needle exist in recipe title
+                const name = element.name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+                if (name.indexOf(lowerNeedle) !== -1) {
+                    level++
+                }
+
+                // Check if needle exist in recipe description
+                const description = element.description.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+                if (description.indexOf(lowerNeedle) !== -1) {
+                    level++
+                }
+
+                // Check if needle exist in recipe ingredients - If one occurence is found, the for loop stop
+                let ingredients = element.ingredients.reduce((acc, e) => {
+                    return acc + ' ' + e.ingredient
+                }, '')
+                ingredients = ingredients.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+                if (ingredients.indexOf(lowerNeedle) !== -1) {
+                    level++
+                }
+
+                // Add level property in each recipe
+                element.level = level
+                return element
+            })
+        
+            // Filter element by level property - All of them whiwh are a level under 0 are delete
+            // Call sortRecipesFiltered for sort element by level
+            recipesFiltered.push(recipes.filter((element) => element.level > 0))
+
+            recipesFiltered = recipes.filter((element) => element.level > 0)
         })
-
-        // Filter element by level property - All of them whiwh are a level under 0 are delete
-        // Call sortRecipesFiltered for sort element by level
-        const recipesFiltered = recipes.filter((element) => element.level > 0)
-
+       
         const recipesFilteredSorted = recipesFiltered.sort((a, b) => b.level - a.level)
 
         const duration = performance.now() - start

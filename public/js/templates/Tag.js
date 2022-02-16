@@ -5,6 +5,7 @@ export class Tag {
     }
 
     build () {
+        
         const tagDOM = document.createElement('div')
         tagDOM.classList.add('tag', 'w-auto', 'py-2', 'px-3', 'rounded')
         tagDOM.setAttribute('data-value', this.tag)

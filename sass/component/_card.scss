@@ -30,3 +30,8 @@
     border: none;
     background-color: inherit;
 }
+
+a, a:hover {
+    all: unset;
+    cursor: pointer;
+}

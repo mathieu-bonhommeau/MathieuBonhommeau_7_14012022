@@ -1,11 +1,20 @@
 /**
  * Class for create items and put them in dropdown list
  */ 
-export class DropdownList {
+ export class DropdownList {
     constructor (arrayItems, target) {
-        this.arrayItems = arrayItems
+        this._arrayItems = arrayItems
         this.target = target
         this.filter = target.dataset.name
+        this.dropdownMenu = document.createElement('div')
+    }
+
+    get arrayItems() {
+        return this._arrayItems
+    }
+
+    set arrayItems (arrayItems) {
+        this._arrayItems = arrayItems
     }
 
     // Build listbox HTML
@@ -14,34 +23,40 @@ export class DropdownList {
         const button = this.target.querySelector('.dropdown-toggle')
         sessionStorage.setItem('button', this.filter)
         button.style.display = 'none'
+        button.setAttribute('aria-expanded', true)
 
         // Replace the button by the listbox
-        const dropdownMenu = document.createElement('div')
-        dropdownMenu.classList.add('dropdown-list', 'rounded')
-        dropdownMenu.setAttribute('aria-labelledby', `dropdown-${this.filter}`)
-        dropdownMenu.innerHTML = 
+        this.dropdownMenu.classList.add('dropdown-list', 'rounded')
+        this.dropdownMenu.setAttribute('aria-labelledby', `dropdown-${this.filter}`)
+        this.dropdownMenu.innerHTML = 
             `
                 <div class="row" data-name="${this.filter}">
-                    <form action="#" class="dropdown-search">
+                    <form action="#" class="dropdown-search" id="search-bar-${this.filter}">
                         <label for="search-${this.filter}" id="title-${this.filter}" class="form-label d-none">Rechercher un ${this.label()}</label>
-                        <input type="search" id="search-${this.filter}" class="form-control py-4 border-0" placeholder="Rechercher un ${this.label()}">
-                        <i class="fas fa-chevron-up close-dropdown"></i>
+                        <input type="search" id="search-${this.filter}" class="form-control py-4 border-0 dropdown-input" placeholder="Rechercher un ${this.label()}" aria-labelledby="search-bar-${this.filter}">
+                        <i class="fas fa-chevron-up close-dropdown" role="button"></i>
                     </form>
-                    
+                    <div class="items-content row" aria-label="Liste des ${this.label()}"></div>
                 </div>
             `
 
-        const dropdownMenuRow = dropdownMenu.querySelector('.row')
+        this.buildItems()
+        
+        this.target.append(this.dropdownMenu)
+        this.target.classList.replace('close', 'open')
+    }
+
+    buildItems () {
+        const itemsContent= this.dropdownMenu.querySelector('.items-content')
+
         this.arrayItems.forEach((element) => {
             const item = document.createElement('div')
-            item.classList.add('item', 'col-4', 'py-1')
+            item.classList.add('item', 'col-12', 'col-lg-6','col-xl-4', 'py-1')
             item.setAttribute('data-value', element)
+            item.setAttribute('role', 'option')
             item.innerHTML = element
-            dropdownMenuRow.append(item)
+            itemsContent.append(item)
         })
-        
-        this.target.append(dropdownMenu)
-        this.target.style.width = 'auto'
     }
 
     label () {
