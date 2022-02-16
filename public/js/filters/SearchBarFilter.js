@@ -3,46 +3,149 @@
  * It browse all recipes and check if the "needle" exist in title, description or ingredients properties
  * If the algorithm doesn't find the needle in one of those, the affected recipe is delete of the initial array
  */
-export class SearchBarFilter {
-    constructor (needle, recipes) {
+ export class SearchBarFilter {
+    constructor (needle, recipes, index) {
         this.needle = needle.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")
         this.recipes = recipes
+        this.index = index
     }
 
     /**
-     * Search occurences of needle in recipes
-     * @param {array} Index
+     * Search occurences of needle in recipes with dichotomous system search
+     * @param {array} index
      * @returns array of recipe
      */
-    search (index) {
-        
+    search () {
+        // Test the performance - start the stopwatch
         const start = performance.now()
+        
+        // Containes all results of search in the index
+        let recipesId = []
+        // Array for keep only id of founded recipe without their level for each word (For see after, if a recipe is in two or more search)
+        let recipeIdsWithoutLevel = []
+        // Array for save ids of recipes when one is founded for two or more words in the search
+        let interRecipes = []
+        
+        // We split the needle with space separator for allow search many words in one time
+        const needles = this.needle.split(' ')
+
+        // We loop on all words founded in needle and search
+        needles.forEach(word => {
+            if (word.length < 3) {
+                return
+            }
+            // Find the word in the index
+            const wordRecipesId = this.find(word)
+            
+            if (wordRecipesId.length > 0) {
+                // Save only ids of recipe in an array
+                let ids = []
+                for (let element of wordRecipesId) {
+                    ids.push(element[0])
+                }
+                recipeIdsWithoutLevel.push(ids)
+                recipesId.push(wordRecipesId)
+            
+            } else {
+                recipesId = ''
+            }
+        })
+        
+        if (recipeIdsWithoutLevel.length < 1) {
+            return []
+        }
+        
+        // Compare arrays (with only ids) for check if a recipe is in two or more fold, in this case, we save id in interRecipes array
+        recipeIdsWithoutLevel[0].forEach((element) => {
+            let duplicate = 0
+            // Loop on elements for check if the element id is in another element, if yes, we increment duplicate
+            for (let i = 1; i < recipeIdsWithoutLevel.length; i++) {  
+                if (recipeIdsWithoutLevel[i].includes(element)) {
+                    duplicate++
+                }
+            }
+            // if duplicate has the same value than the length of the array, that means all the words of the search are in this recipe (id)
+            if (duplicate === recipeIdsWithoutLevel.length -1) {
+                interRecipes.push(element)
+            }
+            
+        })
+        
+        // If any recipe id are save in interRecipe and several words are in the search, that means any recipe corresponds
+        if (interRecipes.length === 0 && recipeIdsWithoutLevel.length > 1) {
+            recipesId = ''
+        }
+        
+        if (recipesId !== '') {
+
+            recipesId = recipesId.flat()
+
+            // For each element, we keep only id array (with their level)
+            let concatRecipesId = []
+            recipesId.forEach(element => {
+                concatRecipesId = concatRecipesId.concat([element])
+            })
+            
+            
+            // Sort array(index obtained) by id (recipeId) and remove all duplicates because when system search, 
+            // it validates for example 'coc' for 'coco' and 'cocotte' and add the same recipe id twice
+            let reduceArray = this.removeDuplicates(this.sortId(recipesId, 0))
+            console.log(reduceArray)
+            // Retrieve the intesection between recipes when we search 2 or more words
+            let interArray = []
+            if (interRecipes.length > 0) {
+                for (let i in reduceArray) {
+                    if (interRecipes.includes(reduceArray[i][0])) {
+                        interArray.push(reduceArray[i])
+                    }
+                }
+            }
+
+            // After, sort the result by level
+            let sortId = this.sortId(interArray, 1)
+            
+            // Finally, we transform index just created by corresponding recipes
+            const finalRecipes = this.transformIdByRecipe(sortId)
+
+            // Test the performance - stop the stopwatch
+            const duration = performance.now() - start;
+            console.log(duration)
+
+            return finalRecipes
+
+        } else {
+            return []
+        }
+    }
+
+    find (word) {
         // The cursor is placed on the middle of the array at the begin sort
         let min = 0
-        let max = index.length -1
+        let max = this.index.length -1
         let cursor = ''
-        let notNeedle = true
+        let notWord = true
         let recipesId = ''
-        
-        while (notNeedle) {
+
+        while (notWord) {
+
             cursor = Math.floor((max-min)/2 + min)
 
             // If the search is found, we stop the loop 
-            if (this.needle === index[cursor][0].substring(0, this.needle.length)) {
-                recipesId = index[cursor][1]
-                notNeedle = false
+            if (word === this.index[cursor][0].substring(0, word.length)) {
+                recipesId = this.index[cursor][1]
+                notWord = false
             }
 
             // If the search is not found, we continue
-            if (this.needle.localeCompare(index[cursor][0].substring(0, this.needle.length)) < 0) {
+            if (word.localeCompare(this.index[cursor][0].substring(0, word.length)) < 0) {
                 max = cursor
-            } else if (this.needle.localeCompare(index[cursor][0].substring(0, this.needle.length)) > 0) {
+            } else if (word.localeCompare(this.index[cursor][0].substring(0, word.length)) > 0) {
                 min = cursor
             }
 
             // if max - min = 1, this means that the search doesn't exist in index because there cannot be an element between min and max 
             if (max - min === 1) {
-                notNeedle = false
+                notWord = false
             }
         }
 
@@ -53,32 +156,20 @@ export class SearchBarFilter {
             let less = cursor - 1
 
             // We continue to search needle if the previous item is OK
-            while (this.needle === index[more][0].substring(0, this.needle.length)) {
-                recipesId = recipesId.concat(index[more][1])
+            while (word === this.index[more][0].substring(0, word.length)) {
+                recipesId = recipesId.concat(this.index[more][1])
                 // Go to the next item
                 more++
             }
             // We continue to search needle if the next item is OK
-            while (this.needle === index[less][0].substring(0, this.needle.length)) {
-                recipesId = recipesId.concat(index[less][1])
+            while (word === this.index[less][0].substring(0, word.length)) {
+                recipesId = recipesId.concat(this.index[less][1])
                 // Go to the previeous item
                 less--
             }
         }
 
-        // Sort array(index obtained) by id (recipeId) and remove all duplicates because when system search, 
-        // it validates for example 'coc' for 'coco' and 'cocotte' and add the same recipe id twice
-        recipesId = this.removeDuplicates(this.sortId(recipesId, 0))
-
-        // After, sort the result by level
-        let sortId = this.sortId(recipesId, 1)
-        
-        // Finally, we transform index just created by corresponding recipes
-        sortId = this.transformIdByRecipe(sortId)
-
-        const duration = performance.now() - start;
-        console.log(duration)
-        return sortId
+        return recipesId
     }
 
     /**
@@ -86,17 +177,27 @@ export class SearchBarFilter {
      * @param {array} Array of recipesId with their level ([[recipeId1, level], [recipeId2, level], ...])
      * @returns array without duplicates
      */
-    removeDuplicates(array) {
-        for (let i = 0; i < array.length - 2; i++) {
+     removeDuplicates(array) {
+        
+        let duplicates = 0
+
+        for (let i = 0; i < array.length-1; i++) {
+            
             // if item has the same recipe id than the next
             if (array[i][0] === array[i + 1][0]) {
+                duplicates++
                 // Added levels of both item
                 array[i][1] += array[i + 1][1]
                 // Delete the second item
                 array.splice(i + 1, 1)
             }
         }
+        if (duplicates > 0) {
+            this.removeDuplicates(array)
+        }
         return array
+        
+        
     }
 
     /**
@@ -105,7 +206,7 @@ export class SearchBarFilter {
      * @param {integer} sortBy The index of array (0: recipeId, 1: level)
      * @returns array sorted
      */
-    sortId(array, sortBy) {
+     sortId(array, sortBy) {
 
         if (array.length > 1) {
             const pivot = array[array.length -1]
@@ -138,7 +239,7 @@ export class SearchBarFilter {
      * @param {*} array 
      * @returns array of recipes
      */
-    transformIdByRecipe(array) {
+     transformIdByRecipe(array) {
 
         const recipesFiltered = []
 

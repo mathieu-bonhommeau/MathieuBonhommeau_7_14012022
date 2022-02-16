@@ -1,7 +1,7 @@
 /**
  * Class for create Recipe card and display it on the page
  */
-export class RecipeCard {
+ export class RecipeCard {
     constructor (recipe) {
         this.recipe = recipe
         this.recipeSection = document.querySelector('#recipe-section .row')
@@ -20,18 +20,19 @@ export class RecipeCard {
      */
     cardDOM () {
         const cardDOM = document.createElement('div')
-        cardDOM.classList.add('col-4', 'mb-5')
+        cardDOM.classList.add('col-12','col-md-6', 'col-xl-4','mb-5', 'recipe')
         let cardHTML =
             `
-                <div class="card h-100">
-                    <div class="card-image"></div>
-                    <div class="card-header d-flex justify-content-between align-items-center pt-3">
-                        <h2 class="card-title fw-normal mb-0 w-75">${ this.recipe.name }</h2>
-                        <span class="card-time fw-bold">${ this.recipe.time } min</span>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <ul class="col-6 list-unstyled list-group">
+                <a href="#" title="Voir cette recette">
+                    <div class="card h-100" aria-labelledby="recipe-title-${this.recipe.id}" aria-describedby="recipe-description-${this.recipe.id}">
+                        <div class="card-image"></div>
+                        <div class="card-header d-flex justify-content-between align-items-center pt-3">
+                            <h2 id="recipe-title-${this.recipe.id}" class="card-title fw-normal mb-0 w-75">${ this.recipe.name }</h2>
+                            <span class="card-time fw-bold">${ this.recipe.time } min</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <ul class="col-6 list-unstyled list-group">
             `
         // Create HTML for each ingredients of the recipe and adapt text (abbreviations and troncate)
         this.recipe.ingredients.forEach(element => {
@@ -45,15 +46,16 @@ export class RecipeCard {
         })
         
         cardHTML += `  
-                            </ul>
-                            <div class="col-6">
-                                <p class="card-text text-justify">
-                                    ${ this.recipe.description.length > 200 ? this.recipe.description.substr(0, 200) + '...' : this.recipe.description }
-                                </p>
+                                </ul>
+                                <div class="col-6">
+                                    <p id="recipe-description-${this.recipe.id}" class="card-text text-justify">
+                                        ${ this.recipe.description.length > 200 ? this.recipe.description.substr(0, 200) + '...' : this.recipe.description }
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </a>
             `
         
         cardDOM.innerHTML = cardHTML

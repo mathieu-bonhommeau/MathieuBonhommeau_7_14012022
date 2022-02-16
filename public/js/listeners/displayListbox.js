@@ -1,6 +1,7 @@
-import { FilterItems } from '../datas/FilterItems.js'
+import { FilterItems } from '../filters/FilterItems.js'
 import { DropdownList } from '../templates/DropdownList.js'
 import { displayTags } from '../listeners/displayTags.js'
+import { FilterIndex } from '../filters/FilterIndex.js'
 
 /**
  * Function for display list of datas in dropdowns
@@ -33,8 +34,39 @@ export function displayListbox (datas, listbox) {
         closeListbox(listbox)
     })
 
+    // Event listener for filter keywords in listbox
+    const input = document.querySelector('.dropdown-input')
+    input.addEventListener('keyup', (event) => {
+
+        // Get value from dropdown input
+        const needle = event.target.value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+
+        const keywords = Array.from(items)
+
+        const keywordsSimplyfied = keywords.map(keyword => {
+            keyword = keyword.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+            return keyword.replace(/\b.{0,2}\b/g, ',').replace(/[^a-z0-9,]{1}/g, '').split(/,{1,}/g)
+        })
+
+        // Build an index with with all avaible words in keywords
+        let index = FilterIndex.buildKeywordsIndex(keywordsSimplyfied)
+        index = Array.from(index).sort()
+
+        // Transform array with keywords and ids to a array with  level with only ids
+        const keywordsFiltered = FilterItems.filter(index, needle)
+            .map(element => element.pop())
+            .flat()
+            .map(element => keywords[element])
+
+        document.querySelector('.items-content').innerHTML = ''
+
+        // Replace items by filtered items
+        dropdownItems.arrayItems = new Set(keywordsFiltered)
+        dropdownItems.buildItems()
+    })
+
     // Event listener for add a tag above listboxs container when click on an listbox element
-    const itemsDOM = document.querySelectorAll('.item')
+    const itemsDOM = document.querySelectorAll('.items-content')
     itemsDOM.forEach((element) => {
         element.addEventListener('click', displayTags)
     })
@@ -55,7 +87,7 @@ export function closeListbox (listbox) {
     // Add the button in the DOM
     const buttonDOM = document.querySelector(`.dropdown-filters[data-name="${listbox}"] button`)
     buttonDOM.style.display = 'inline-block'
-    buttonDOM.parentElement.style.width = '170px'
+    buttonDOM.parentElement.classList.replace('open', 'close')
+    buttonDOM.setAttribute('aria-expanded', 'false')
 
 }
-

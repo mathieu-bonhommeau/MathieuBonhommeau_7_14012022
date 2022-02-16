@@ -24,6 +24,14 @@
 
 <body>
 
+    <!-- LOADER -->
+    <div class="loader-container">
+        <div class="loader">
+            <img src="./public/assets/favicon.svg" class="loader__img" alt="Icon des petits plats" class="d-block mx-auto">
+            <p class="loader__title text-center">Les petits plats</p>
+        </div>
+    </div>
+
     <!-- HEADER -->
     <div class="container">
         <header>
@@ -62,29 +70,32 @@
                     </div>
                 </div>
                 
-                <!-- Tags location -->
-                <div class="tags-location d-flex gap-3 mb-4"></div>
+                 <!-- Messages location -->
+                 <div class="messages-location"></div>
 
-                <!-- Search dropdown - by tag -->
-                <div class="row row-dropdowns">
-                    <div class="col-12 d-flex gap-3">
-                        <div class="dropdown dropdown-filters" data-name="ingredients">
-                            <button class="btn btn-primary dropdown-toggle w-100 p-4 fw-bold justify-content-between align-items-center" type="button" id="dropdown-ingredients" data-type="button" aria-haspopup="true" aria-expanded="false">
-                                Ingrédients
-                            </button>
-                        </div>
-                        <div class="dropdown dropdown-filters" data-name="appliances">
-                            <button class="btn btn-success dropdown-toggle w-100 p-4 fw-bold justify-content-between align-items-center" type="button" id="dropdown-appliances" data-type="button" aria-haspopup="true" aria-expanded="false">
-                                Appareil
-                            </button>
-                        </div>
-                        <div class="dropdown dropdown-filters" data-name="ustensils">
-                            <button class="btn btn-danger dropdown-toggle w-100 p-4 fw-bold justify-content-between align-items-center" type="button" id="dropdown-ustensils" data-type="button" aria-haspopup="true" aria-expanded="false">
-                                Ustensiles
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                 <!-- Tags location -->
+                 <div class="tags-location d-flex flex-wrap gap-3 mb-4"></div>
+ 
+                 <!-- Search dropdown - by tag -->
+                 <div class="row row-dropdowns">
+                     <div class="col-12 d-flex gap-3">
+                         <div class="dropdown dropdown-filters close" data-name="ingredients">
+                             <button class="btn btn-primary dropdown-toggle w-100 p-4 fw-bold justify-content-between align-items-center" type="button" id="dropdown-ingredients" data-type="button" aria-haspopup="true" aria-expanded="false">
+                                 Ingrédients
+                             </button>
+                         </div>
+                         <div class="dropdown dropdown-filters close" data-name="appliances">
+                             <button class="btn btn-success dropdown-toggle w-100 p-4 fw-bold justify-content-between align-items-center" type="button" id="dropdown-appliances" data-type="button" aria-haspopup="true" aria-expanded="false">
+                                 Appareil
+                             </button>
+                         </div>
+                         <div class="dropdown dropdown-filters close" data-name="ustensils">
+                             <button class="btn btn-danger dropdown-toggle w-100 p-4 fw-bold justify-content-between align-items-center" type="button" id="dropdown-ustensils" data-type="button" aria-haspopup="true" aria-expanded="false">
+                                 Ustensiles
+                             </button>
+                         </div>
+                     </div>
+                 </div>
             </section>
 
             <section id="recipe-section" class="my-4">
